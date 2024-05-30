@@ -1,0 +1,22 @@
+{
+    "name": "demo_ruleset",
+    "date_updated": "2024-05-29T20:38:14.048120",
+    "country": "US",
+    "region": {
+        "state": "California",
+        "county": "Santa Clara",
+        "city": "Stanford"
+    },
+    "rules": {
+        "BATTERY": "ELECTRONICS_RECYCLING_CENTER",
+        "BIOLOGICAL": "COMPOST",
+        "CARDBOARD": "RECYCLE",
+        "CLOTHES": "LANDFILL",
+        "GLASS": "RECYCLE",
+        "METAL": "RECYCLE",
+        "PAPER": "RECYCLE",
+        "PLASTIC": "RECYCLE",
+        "SHOES": "LANDFILL",
+        "TRASH": "LANDFILL"
+    }
+}
