@@ -15,7 +15,7 @@ class WasteClass(Enum):
     SHOES = 9
     TRASH = 10
 
-WASTE_DEST_IMG_DIR = "waste_destinations"
+WASTE_DEST_IMG_DIR = "images"
 
 class WasteDestination(Enum):
     """

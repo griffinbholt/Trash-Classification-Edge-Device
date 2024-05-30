@@ -6,4 +6,4 @@ if __name__ == "__main__":
     for dest in WasteDestination:
         img = Image.open(dest.image())
         img.save(WasteDestination.recommended())
-        sleep(5)
+        sleep(2)
