@@ -1,2 +1,3 @@
 pycountry==23.12.11
+pyqt5==5.15.10
 pillow==9.4.0

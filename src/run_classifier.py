@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QLa
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import Qt, QTimer
 
-from time import sleep
+from Classifier import Classifier
 
 class ImageViewerApp(QMainWindow):
     def __init__(self):
@@ -50,13 +50,12 @@ class ImageViewerApp(QMainWindow):
     def scan_input(self):
         self.classify_button.setEnabled(False)
         self.load_image("images/scanning.jpg")
-        self.timer = QTimer(self)
-        self.timer.setSingleShot(True)
-        self.timer.timeout.connect(self.report_result)
-        self.timer.start(5000)
+        self.classifier = Classifier()
+        self.classifier.result_ready.connect(self.display_result)
+        self.classifier.start()
 
-    def report_result(self):
-        self.load_image("images/Landfill.jpg")
+    def display_result(self, filename):
+        self.load_image(filename)
         self.timer = QTimer(self)
         self.timer.setSingleShot(True)
         self.timer.timeout.connect(self.waiting_state)
