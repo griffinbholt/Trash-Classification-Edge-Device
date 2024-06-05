@@ -5,7 +5,7 @@ from waste import WasteClass, WasteDestination
 
 class Ruleset():
     """
-    A ruleset mappeing waste item to waste destination for a specified region.
+    A ruleset mapping waste item to waste destination for a specified region.
     Meant to be easily interchangeable from region to region.
     """
     def __init__(self,
