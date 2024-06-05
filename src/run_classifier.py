@@ -50,7 +50,7 @@ class ImageViewerApp(QMainWindow):
     def scan_input(self):
         self.classify_button.setEnabled(False)
         self.load_image("images/scanning.jpg")
-        self.classifier = Classifier()
+        self.classifier = Classifier(camera=0)  # TODO: Argument
         self.classifier.result_ready.connect(self.display_result)
         self.classifier.start()
 

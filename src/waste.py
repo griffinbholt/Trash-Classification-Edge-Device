@@ -4,16 +4,16 @@ class WasteClass(Enum):
     """
     The classes that are currently classified by our classification algorithm
     """
-    BATTERY = 1
-    BIOLOGICAL = 2
-    CARDBOARD = 3
-    CLOTHES = 4
-    GLASS = 5
-    METAL = 6
-    PAPER = 7
-    PLASTIC = 8
-    SHOES = 9
-    TRASH = 10
+    BATTERY = 0
+    BIOLOGICAL = 1
+    CARDBOARD = 2
+    CLOTHES = 3
+    GLASS = 4
+    METAL = 5
+    PAPER = 6
+    PLASTIC = 7
+    SHOES = 8
+    TRASH = 9
 
 WASTE_DEST_IMG_DIR = "images"
 
@@ -21,10 +21,10 @@ class WasteDestination(Enum):
     """
     The waste destinations we currently cover
     """
-    ELECTRONICS_RECYCLING_CENTER = 1
-    COMPOST = 2
-    RECYCLE = 3
-    LANDFILL = 4
+    ELECTRONICS_RECYCLING_CENTER = 0
+    COMPOST = 1
+    RECYCLE = 2
+    LANDFILL = 3
 
     def image(self):
         images = {
