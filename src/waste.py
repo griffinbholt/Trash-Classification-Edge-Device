@@ -15,8 +15,6 @@ class WasteClass(Enum):
     SHOES = 8
     TRASH = 9
 
-WASTE_DEST_IMG_DIR = "images"
-
 class WasteDestination(Enum):
     """
     The waste destinations we currently cover
@@ -33,8 +31,4 @@ class WasteDestination(Enum):
             WasteDestination.RECYCLE: "Recycle.jpg",
             WasteDestination.LANDFILL: "Landfill.jpg"
         }
-        return WASTE_DEST_IMG_DIR + "/" + images[self]
-
-    @staticmethod
-    def recommended():
-        return WASTE_DEST_IMG_DIR + "/recommended.jpg"
+        return images[self]
