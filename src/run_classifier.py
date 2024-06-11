@@ -1,5 +1,10 @@
 import json
+import shutil
 import sys
+import time
+
+from picamera2 import Picamera2, Preview
+from PIL import Image
 
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton
 from PyQt5.QtGui import QPixmap
@@ -19,7 +24,7 @@ class ImageViewerApp(QMainWindow):
         self.img_dir = config["images"]["dir"]
         self.waiting_img = self.img_dir + config["images"]["waiting"]
         self.scanning_img = self.img_dir + config["images"]["scanning"]
-        input_img = config["images"]["input"]
+        self.input_img = config["images"]["input"]
         self.result_display_time = config["UI"]["result_display_time"]
 
         # Set the window properties (title and initial size)
@@ -46,7 +51,7 @@ class ImageViewerApp(QMainWindow):
         self.waiting_state()
 
         # Connect button clicks to navigation methods
-        self.classify_button.clicked.connect(self.scan_input)
+        self.classify_button.clicked.connect(self.camera_state)
 
         # Create a layout for the central widget
         layout = QVBoxLayout()
@@ -56,16 +61,37 @@ class ImageViewerApp(QMainWindow):
         # Set the layout for the central widget
         central_widget.setLayout(layout)
 
+        # Load camera
+        self.picam2 = Picamera2(camera_num=config["classifier"]["camera"])
+        self.picam2.start_preview(Preview.NULL)
+        cam_config = self.picam2.create_preview_configuration({
+            "size": (320, 240),
+            "format": "BGR888"
+        })
+        self.picam2.configure(cam_config)
+        self.picam2.start()    
+
         # Initialize the Classifier
         self.classifier = Classifier(
             config=config["classifier"],
+            camera=self.picam2,
             img_dir=self.img_dir,
-            input_img=input_img
+            input_img=self.input_img
         )
 
     def waiting_state(self):
         self.classify_button.setEnabled(True)
         self.load_image(self.waiting_img)
+
+    def camera_state(self):
+        self.classify_button.setEnabled(False)
+        start = time.time()
+        while (time.time() - start < 10):
+            img = Image.fromarray(self.picam2.capture_array()).resize(size=(224, 224), resample=Image.Resampling.LANCZOS)
+            img.save(self.img_dir + "new_" + self.input_img)
+            shutil.move(self.img_dir + "new_" + self.input_img, self.img_dir + self.input_img)
+            self.load_image(self.img_dir + self.input_img)
+        self.scan_input()
 
     def load_image(self, image_path):
         pixmap = QPixmap(image_path)
@@ -73,7 +99,6 @@ class ImageViewerApp(QMainWindow):
         self.image_label.setPixmap(scaled_pixmap)
 
     def scan_input(self):
-        self.classify_button.setEnabled(False)
         self.load_image(self.scanning_img)
         self.classifier.result_ready.connect(self.display_result)
         self.classifier.start()

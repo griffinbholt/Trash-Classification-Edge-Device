@@ -3,28 +3,20 @@ import shutil
 import time
 import tflite_runtime.interpreter as tflite
 
-from picamera2 import Picamera2, Preview
 from PIL import Image
 from PyQt5.QtCore import QThread, pyqtSignal
 
 from ruleset import Ruleset
-from waste import WasteClass, WasteDestination
+from waste import WasteClass
 
 class Classifier(QThread):
     result_ready = pyqtSignal(str)
 
-    def __init__(self, config, img_dir, input_img):
+    def __init__(self, config, camera, img_dir, input_img):
         super().__init__()
 
         # Load the camera
-        self.picam2 = Picamera2(camera_num=config["camera"])
-        self.picam2.start_preview(Preview.NULL)
-        cam_config = self.picam2.create_preview_configuration({
-            "size": (320, 240),
-            "format": "BGR888"
-        })
-        self.picam2.configure(cam_config)
-        self.picam2.start()
+        self.picam2 = camera
 
         # Load the model
         self.interpreter = tflite.Interpreter(
