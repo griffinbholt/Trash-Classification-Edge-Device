@@ -18,7 +18,7 @@
     },
     "classifier": {
         "camera": 0,
-        "model_path": "models/trash_classifier_v0.tflite",
+        "model_path": "models/trash_classifier_v2.tflite",
         "n_threads": 2,
         "n_samples": 100,
         "ruleset": "rulesets/demo_ruleset.json"
