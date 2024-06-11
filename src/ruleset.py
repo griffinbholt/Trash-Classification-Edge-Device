@@ -1,11 +1,12 @@
 from datetime import datetime
+import numpy as np
 import json
 import pycountry
 from waste import WasteClass, WasteDestination
 
 class Ruleset():
     """
-    A ruleset mappeing waste item to waste destination for a specified region.
+    A ruleset mapping waste item to waste destination for a specified region.
     Meant to be easily interchangeable from region to region.
     """
     def __init__(self,
@@ -20,8 +21,11 @@ class Ruleset():
         self.region = region
         self.rules = rules
 
-    def __call__(self, waste_class: WasteClass) -> WasteDestination:
-        return self.rules[waste_class]
+    def __call__(self, class_probs: np.ndarray) -> WasteDestination:
+        dest_probs = np.zeros(len(WasteDestination))
+        for i in range(len(WasteClass)):
+            dest_probs[self.rules[WasteClass(i)].value] += class_probs[i]
+        return WasteDestination(dest_probs.argmax()), dest_probs.max()
 
     def _to_dict(self) -> dict:
         return {

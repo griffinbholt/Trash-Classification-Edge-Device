@@ -1,0 +1,26 @@
+{
+    "UI": {
+        "window": {
+            "title": "Waste Classifier",
+            "x": 0,
+            "y": 0,
+            "width": 300,
+            "height": 200
+        },
+        "button_text": "Classify",
+        "live_feed_display_time": 5000,
+        "result_display_time": 3000
+    },
+    "images": {
+        "dir": "images/",
+        "waiting": "classify.jpg",
+        "input": "input.png"
+    },
+    "classifier": {
+        "camera": 0,
+        "model_path": "models/trash_classifier_v2.tflite",
+        "n_threads": 2,
+        "n_samples": 10,
+        "ruleset": "rulesets/demo_ruleset.json"
+    }
+}
