@@ -20,6 +20,7 @@ class LiveFeed(QThread):
         self.ThreadActive = True
         while self.ThreadActive:
             img = Image.fromarray(self.picam2.capture_array()).resize(size=(224, 224), resample=Image.Resampling.LANCZOS)
+            img = img.transpose(Image.FLIP_LEFT_RIGHT)
             
             draw = ImageDraw.Draw(img)
             font_size = 100
@@ -47,6 +48,7 @@ class LiveFeed(QThread):
             self.ImageUpdate.emit(Pic)
         # Load clean image
         img = Image.fromarray(self.picam2.capture_array()).resize(size=(224, 224), resample=Image.Resampling.LANCZOS)
+        img = img.transpose(Image.FLIP_LEFT_RIGHT)
         ConvertToQtFormat = QImage(np.array(img).data, 224, 224, QImage.Format_RGB888)
         Pic = ConvertToQtFormat.scaled(600, 600)
         self.ImageUpdate.emit(Pic)
