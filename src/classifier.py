@@ -66,9 +66,9 @@ class Classifier(QThread):
 
         probabilities /= self.n_samples
         waste_class, class_prob = WasteClass(probabilities.argmax()), probabilities.max()
-        waste_destination, dest_prob = self.ruleset(probabilities)
+        waste_destination = self.ruleset(waste_class)
 
         print("Waste Class: ", str(waste_class), " Probability: ", class_prob)
-        print("Waste Destination: ", str(waste_destination), " Probability: ", dest_prob, "\n")
+        print("Waste Destination: ", str(waste_destination), "\n")
 
         self.result_ready.emit(self.img_dir + waste_destination.image())

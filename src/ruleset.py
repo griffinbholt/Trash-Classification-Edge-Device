@@ -20,12 +20,20 @@ class Ruleset():
         self.country = country
         self.region = region
         self.rules = rules
+        # Deprecated: see __call__ below
+        # self.counts = np.zeros(len(WasteDestination))
+        # for waste_class in WasteClass:
+            # self.counts[self.rules[waste_class].value] += 1
 
-    def __call__(self, class_probs: np.ndarray) -> WasteDestination:
-        dest_probs = np.zeros(len(WasteDestination))
-        for i in range(len(WasteClass)):
-            dest_probs[self.rules[WasteClass(i)].value] += class_probs[i]
-        return WasteDestination(dest_probs.argmax()), dest_probs.max()
+    def __call__(self, waste_class: WasteClass) -> WasteDestination:
+        return self.rules[waste_class]
+        # Deprecated: From Waste Class Probability Array class_probs
+        # dest_probs = np.zeros(len(WasteDestination))
+        # for i in range(len(WasteClass)):
+        #     dest_probs[self.rules[WasteClass(i)].value] += class_probs[i]
+        # dest_probs /= self.counts
+        # dest_probs /= np.sum(dest_probs)
+        # return WasteDestination(dest_probs.argmax()), dest_probs.max()
 
     def _to_dict(self) -> dict:
         return {
