@@ -42,7 +42,7 @@ class Classifier(QThread):
         self.ruleset = Ruleset.from_json(config["ruleset"])
 
     def run(self):
-        votes = np.zeros(self.n_samples).astype(int)
+        probabilities = np.zeros(len(WasteClass))
         for i in range(self.n_samples):
             # Retrieve image
             img = Image.fromarray(self.picam2.capture_array()).resize(size=(self.width, self.height), resample=Image.Resampling.LANCZOS)
@@ -62,12 +62,13 @@ class Classifier(QThread):
             self.interpreter.invoke()
             output_data = self.interpreter.get_tensor(self.output_details[0]["index"])
             results = np.squeeze(output_data)
-            votes[i] = results.argmax()
+            probabilities += results
 
-        waste_class = WasteClass(np.bincount(votes).argmax())
-        waste_destination = self.ruleset(waste_class)
+        probabilities /= self.n_samples
+        waste_class, class_prob = WasteClass(probabilities.argmax()), probabilities.max()
+        waste_destination, dest_prob = self.ruleset(probabilities)
 
-        print("Waste Class: ", str(waste_class))
-        print("Waste Destination: ", str(waste_destination), "\n")
+        print("Waste Class: ", str(waste_class), " Probability: ", class_prob)
+        print("Waste Destination: ", str(waste_destination), " Probability: ", dest_prob, "\n")
 
         self.result_ready.emit(self.img_dir + waste_destination.image())

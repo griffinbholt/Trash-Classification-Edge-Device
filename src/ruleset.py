@@ -1,4 +1,5 @@
 from datetime import datetime
+import numpy as np
 import json
 import pycountry
 from waste import WasteClass, WasteDestination
@@ -20,8 +21,11 @@ class Ruleset():
         self.region = region
         self.rules = rules
 
-    def __call__(self, waste_class: WasteClass) -> WasteDestination:
-        return self.rules[waste_class]
+    def __call__(self, class_probs: np.ndarray) -> WasteDestination:
+        dest_probs = np.zeros(len(WasteDestination))
+        for i in range(len(WasteClass)):
+            dest_probs[self.rules[WasteClass(i)].value] += class_probs[i]
+        return WasteDestination(dest_probs.argmax()), dest_probs.max()
 
     def _to_dict(self) -> dict:
         return {
